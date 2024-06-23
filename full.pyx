@@ -189,9 +189,8 @@ def run_kmean(csv_file):
         df.to_csv(csv_file, index=False)
 
 
-def run_brute_force(csv_file):
-    list_files = [i for i in range(1, 41)]
-    for i in list_files:
+def run_brute_force(csv_file, index):
+    for i in index:
         print("errou")
         print(i)
         num_nodes, num_edges, k, edges = read_graph_file(f"entradas/pmed{i}.txt")
