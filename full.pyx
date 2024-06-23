@@ -4,7 +4,9 @@ import random
 from itertools import combinations
 import pandas as pd
 import time
+
 INF = 9999
+
 
 def brute_force(graph, k):
     nodes = [i for i in range(len(graph))]
@@ -23,8 +25,9 @@ def brute_force(graph, k):
         if radius < best_radius:
             best_clusters = clusters
             best_radius = radius
-    
+
     return best_clusters, best_radius
+
 
 def find_radius(graph, clusters):
     # set the initial radius as zero because we want the max
@@ -62,6 +65,7 @@ def update_centroids(graph, clusters):
 
     return new_centroids
 
+
 def assign_clusters(graph, k, centroids):
     num_nodes = len(graph)
     clusters = {centroid: [] for centroid in centroids}
@@ -79,6 +83,7 @@ def assign_clusters(graph, k, centroids):
         clusters[clossest_centroid].append(i)
 
     return clusters
+
 
 def kmeans(graph, k):
     num_nodes = len(graph)
@@ -111,7 +116,7 @@ def kmeans(graph, k):
             # if the soluction is better, set it as the better solution
             best_clusters = clusters
             radius = new_radius
-        
+
     # return the best solution found
     return best_clusters, radius
 
@@ -130,12 +135,12 @@ def build_matrix(edges, num_nodes):
             graph[e[0] - 1][e[1] - 1] += e[2]
             graph[e[1] - 1][e[0] - 1] += e[2]
 
-
     # put zeros in the main diagonal
     for i in range(num_nodes):
         graph[i][i] = 0
 
     return graph
+
 
 def floyd_warshall(graph):
     number_nodes = len(graph)
@@ -143,10 +148,11 @@ def floyd_warshall(graph):
     for k in range(number_nodes):
         for i in range(number_nodes):
             for j in range(number_nodes):
-                graph[i][j] = min(graph[i][j],graph[i][k] + graph[k][j])
+                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+
 
 def read_graph_file(file_path):
-    with Path.open(file_path, 'r') as file:
+    with Path.open(Path(file_path), "r") as file:
         lines = file.readlines()
 
     num_nodes, num_edges, k = map(int, lines[0].strip().split())
@@ -159,11 +165,12 @@ def read_graph_file(file_path):
 
     return num_nodes, num_edges, k, edges
 
+
 def run_kmean(csv_file):
     list_files = [i for i in range(1, 41)]
     for i in list_files:
         print(i)
-        num_nodes, num_edges, k, edges = read_graph_file(f'entradas\pmed{i}.txt')
+        num_nodes, num_edges, k, edges = read_graph_file(f"entradas/pmed{i}.txt")
         graph = build_matrix(edges, num_nodes)
         floyd_warshall(graph)
 
@@ -177,15 +184,16 @@ def run_kmean(csv_file):
 
         df = pd.read_csv(csv_file)
 
-        df.loc[len(df)] = {'Radius': radius, 'Time': duration}
+        df.loc[len(df)] = {"Radius": radius, "Time": duration}
 
         df.to_csv(csv_file, index=False)
+
 
 def run_brute_force(csv_file, index):
     for i in index:
         print("errou")
         print(i)
-        num_nodes, num_edges, k, edges = read_graph_file(f'entradas\pmed{i}.txt')
+        num_nodes, num_edges, k, edges = read_graph_file(f"entradas/pmed{i}.txt")
         graph = build_matrix(edges, num_nodes)
         floyd_warshall(graph)
 
@@ -199,6 +207,6 @@ def run_brute_force(csv_file, index):
 
         df = pd.read_csv(csv_file)
 
-        df.loc[len(df)] = {'Radius': radius, 'Time': duration}
+        df.loc[len(df)] = {"Radius": radius, "Time": duration}
 
         df.to_csv(csv_file, index=False)
